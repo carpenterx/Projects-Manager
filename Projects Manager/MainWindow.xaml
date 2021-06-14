@@ -12,7 +12,14 @@
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
-        <ListView x:Name="reposListView" Margin="2" SelectionMode="Single" ScrollViewer.CanContentScroll="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="requestsTxt"/>
+
+        <ListView Grid.Row="1" x:Name="reposListView" Margin="2" SelectionMode="Single" ScrollViewer.CanContentScroll="False">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="2" ToolTip="{Binding Description}">

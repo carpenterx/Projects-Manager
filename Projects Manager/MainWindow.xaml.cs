@@ -1,7 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Projects_Manager.Models;
+using RestSharp;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,9 +28,12 @@ namespace Projects_Manager
 
             // Rest request
             /*RestCaller restCaller = new();
-            string json = restCaller.GetReposResponse(token).Content;
+            IRestResponse response = restCaller.GetReposResponse(token);
+            string json = response.Content;
+            Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
+            UpdateRemainingRequestsCount(headerDictionary);
             File.WriteAllText(RESPONSE_JSON_PATH, json);
-            ObservableCollection<Repos> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repos>>(json);*/
+            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);*/
 
             // Load local
             string json = File.ReadAllText(RESPONSE_JSON_PATH);
@@ -35,7 +42,10 @@ namespace Projects_Manager
             reposListView.ItemsSource = myRepos;
         }
 
-
+        private void UpdateRemainingRequestsCount(Dictionary<string, string> headerDictionary)
+        {
+            requestsTxt.Text = headerDictionary["X-RateLimit-Remaining"];
+        }
 
         private void OpenIssuesLink(object sender, RoutedEventArgs e)
         {
