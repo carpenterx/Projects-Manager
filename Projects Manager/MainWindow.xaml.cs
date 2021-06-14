@@ -129,7 +129,12 @@ namespace Projects_Manager
         private void OpenProjectsLink(object sender, RoutedEventArgs e)
         {
             Repo repo = (sender as Button).DataContext as Repo;
-            GetRepoProjectsJson(RESPONSE_JSON_ROOT,repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
+            string json = GetRepoProjectsJson(RESPONSE_JSON_ROOT,repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
+            List<Project> repoProjects = JsonConvert.DeserializeObject<List<Project>>(json);
+            if (repoProjects.Count > 0)
+            {
+                OpenInChrome(repoProjects[^1].HtmlUrl);
+            }
         }
     }
 }
