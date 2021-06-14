@@ -16,9 +16,6 @@ namespace Projects_Manager.Models
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("has_projects")]
-        public bool HasProjects { get; set; }
-
         [JsonProperty("open_issues_count")]
         public long OpenIssuesCount { get; set; }
     }

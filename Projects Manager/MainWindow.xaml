@@ -50,7 +50,7 @@
                             <iconPacks:PackIconMaterial Kind="Github" Margin="2"/>
                         </Button>
                         <Button Grid.Column="4" Margin="2">
-                            <iconPacks:PackIconBootstrapIcons Kind="Kanban" Foreground="Teal" Margin="2" Visibility="{Binding HasProjects, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <iconPacks:PackIconBootstrapIcons Kind="Kanban" Foreground="Teal" Margin="2"/>
                         </Button>
                         
                     </Grid>
