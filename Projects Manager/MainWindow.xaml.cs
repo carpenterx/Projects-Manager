@@ -17,7 +17,6 @@ namespace Projects_Manager
     public partial class MainWindow : Window
     {
         private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
-        //private static readonly string RESPONSE_JSON_PATH = @"C:\Users\jorda\Desktop\projects_response.json";
         private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
         private static readonly string REPOS_FILE_NAME = @"repos.json";
         private string token;
@@ -36,21 +35,6 @@ namespace Projects_Manager
 
         private string GetReposJson()
         {
-            // Rest request
-            /*RestCaller restCaller = new();
-            IRestResponse response = restCaller.GetReposResponse(token);
-            string json = response.Content;
-            Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-            UpdateRemainingRequestsCount(headerDictionary);
-            File.WriteAllText(RESPONSE_JSON_PATH, json);
-            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);*/
-
-            // Load local
-            /*string json = File.ReadAllText(RESPONSE_JSON_PATH);
-            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);*/
-
-            //reposListView.ItemsSource = myRepos;
-
             string json;
             string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
             if (File.Exists(localReposJsonPath))
@@ -81,13 +65,18 @@ namespace Projects_Manager
         private void OpenIssuesLink(object sender, RoutedEventArgs e)
         {
             Repo repo = (sender as Button).DataContext as Repo;
-            Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", $"{repo.HtmlUrl}/issues");
+            OpenInChrome($"{repo.HtmlUrl}/issues");
         }
 
         private void OpenRepoClick(object sender, RoutedEventArgs e)
         {
             Repo repo = (sender as Button).DataContext as Repo;
-            Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", repo.HtmlUrl);
+            OpenInChrome(repo.HtmlUrl);
+        }
+
+        private void OpenInChrome(string url)
+        {
+            Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", url);
         }
     }
 }
