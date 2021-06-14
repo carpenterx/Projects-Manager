@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,6 +21,7 @@ namespace Projects_Manager
         private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
         private static readonly string REPOS_FILE_NAME = "repos.json";
         private static readonly string PROJECTS_NAME_ENDING = "-Projects.json";
+        private static readonly string HEADERS_PART = "Headers-";
         
         private string token;
 
@@ -29,16 +31,17 @@ namespace Projects_Manager
 
             token = File.ReadAllText(TOKEN_PATH);
 
-            string json = GetReposJson();
+            string json = GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
             ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);
 
             reposListView.ItemsSource = myRepos;
         }
 
-        private string GetReposJson()
+        private string GetReposJson(string rootPath, string fileName, string headersPart)
         {
             string json;
-            string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
+            //string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
+            string localReposJsonPath = Path.Combine(rootPath, fileName);
             
             if (File.Exists(localReposJsonPath))
             {
@@ -50,21 +53,36 @@ namespace Projects_Manager
             {
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetReposResponse(token);
-                json = response.Content;
-                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                UpdateRemainingRequestsCount(headerDictionary);
-                File.WriteAllText(localReposJsonPath, json);
-                jsonTypeTxt.Text = "Request";
+                json = StoreResponseLocally(response, rootPath, fileName, headersPart);
             }
 
             return json;
         }
 
-        private string GetRepoProjectsJson(string repoName)
+        private string StoreResponseLocally(IRestResponse response, string rootPath, string fileName, string headersPart)
+        {
+            string json = response.Content;
+            Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
+            UpdateRemainingRequestsCount(headerDictionary);
+            string responsePath = Path.Combine(rootPath, fileName);
+            File.WriteAllText(responsePath, json);
+            string headersPath = Path.Combine(rootPath, $"{headersPart}{fileName}");
+            StringBuilder headersBuilder = new();
+            foreach (var header in response.Headers)
+            {
+                headersBuilder.AppendLine($"{header.Name}: {header.Value}");
+            }
+            File.WriteAllText(headersPath, headersBuilder.ToString());
+            jsonTypeTxt.Text = "Request";
+            return json;
+        }
+
+        private string GetRepoProjectsJson(string rootPath, string repoName, string projectsNameEnding, string headersPart)
         {
             string json;
 
-            string localRepoProjectsJsonPath = Path.Combine(RESPONSE_JSON_ROOT, $"{repoName}{PROJECTS_NAME_ENDING}");
+            //string localRepoProjectsJsonPath = Path.Combine(RESPONSE_JSON_ROOT, $"{repoName}{PROJECTS_NAME_ENDING}");
+            string localRepoProjectsJsonPath = Path.Combine(rootPath, $"{repoName}{projectsNameEnding}");
             if (File.Exists(localRepoProjectsJsonPath))
             {
                 // Load local
@@ -75,11 +93,12 @@ namespace Projects_Manager
             {
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetRepoProjectsResponse(repoName, token);
-                json = response.Content;
+                json = StoreResponseLocally(response, rootPath, $"{repoName}{projectsNameEnding}", headersPart);
+                /*json = response.Content;
                 Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
                 UpdateRemainingRequestsCount(headerDictionary);
                 File.WriteAllText(localRepoProjectsJsonPath, json);
-                jsonTypeTxt.Text = "Request";
+                jsonTypeTxt.Text = "Request";*/
             }
 
             return json;
@@ -110,7 +129,7 @@ namespace Projects_Manager
         private void OpenProjectsLink(object sender, RoutedEventArgs e)
         {
             Repo repo = (sender as Button).DataContext as Repo;
-            GetRepoProjectsJson(repo.Name);
+            GetRepoProjectsJson(RESPONSE_JSON_ROOT,repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
         }
     }
 }
