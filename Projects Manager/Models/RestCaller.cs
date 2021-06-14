@@ -11,12 +11,11 @@ namespace Projects_Manager.Models
 {
     class RestCaller
     {
-        private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
         private static readonly string userName = "carpenterx";
-        private string repoName = "Readme-Generator";
+        //private string repoName = "Readme-Generator";
 
 
-        public string GetRestResponse()
+        /*public string GetRestResponse()
         {
             RestClient client = new RestClient("https://api.github.com/");
             string token = File.ReadAllText(TOKEN_PATH);
@@ -37,19 +36,19 @@ namespace Projects_Manager.Models
                 StringBuilder responseBuilder = new();
                 //responseBuilder.AppendLine(response.Headers[])
                 Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                /*foreach (var header in response.Headers)
+                *//*foreach (var header in response.Headers)
                 {
                     responseBuilder.AppendLine($"{header.Name}: {header.Value}");
-                }*/
+                }*//*
                 responseBuilder.AppendLine($"Remaining requests: {headerDictionary["X-RateLimit-Remaining"]}");
                 responseBuilder.AppendLine($"Requests count: {headerDictionary["X-RateLimit-Used"]}");
                 responseBuilder.AppendLine($"Rate limit resets at: {UnixTimeStampToDateTime(headerDictionary["X-RateLimit-Reset"])}");
                 //responseBuilder.AppendLine(headerDictionary["Link"]);
-                /*
+                *//*
                  * X-RateLimit-Remaining: 4997
                     X-RateLimit-Reset: 1623657444
                     X-RateLimit-Used: 3
-                 */
+                 *//*
                 // Link: <https://api.github.com/user/9919/repos?page=2>; rel="next", <https://api.github.com/user/9919/repos?page=13>; rel="last"
 
 
@@ -64,12 +63,12 @@ namespace Projects_Manager.Models
                 return response.ErrorMessage;
             }
             //return response.StatusCode.ToString();
-        }
+        }*/
 
-        public IRestResponse GetReposResponse()
+        public IRestResponse GetReposResponse(string token)
         {
             RestClient client = new RestClient("https://api.github.com/");
-            string token = File.ReadAllText(TOKEN_PATH);
+            //string token = File.ReadAllText(TOKEN_PATH);
 ;
             RestRequest request = new RestRequest(ListAuthenticatedUserRepos(), Method.GET);
             request.AddParameter("state", "all");
