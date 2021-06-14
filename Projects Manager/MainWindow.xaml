@@ -17,7 +17,10 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="requestsTxt"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="requestsTxt"/>
+            <TextBlock x:Name="jsonTypeTxt"/>
+        </StackPanel>
 
         <ListView Grid.Row="1" x:Name="reposListView" Margin="2" SelectionMode="Single" ScrollViewer.CanContentScroll="False">
             <ListView.ItemTemplate>

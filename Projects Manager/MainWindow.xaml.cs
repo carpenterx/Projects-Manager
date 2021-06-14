@@ -17,7 +17,9 @@ namespace Projects_Manager
     public partial class MainWindow : Window
     {
         private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
-        private static readonly string RESPONSE_JSON_PATH = @"C:\Users\jorda\Desktop\projects_response.json";
+        //private static readonly string RESPONSE_JSON_PATH = @"C:\Users\jorda\Desktop\projects_response.json";
+        private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
+        private static readonly string REPOS_FILE_NAME = @"repos.json";
         private string token;
 
         public MainWindow()
@@ -26,6 +28,14 @@ namespace Projects_Manager
 
             token = File.ReadAllText(TOKEN_PATH);
 
+            string json = GetReposJson();
+            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);
+
+            reposListView.ItemsSource = myRepos;
+        }
+
+        private string GetReposJson()
+        {
             // Rest request
             /*RestCaller restCaller = new();
             IRestResponse response = restCaller.GetReposResponse(token);
@@ -36,10 +46,31 @@ namespace Projects_Manager
             ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);*/
 
             // Load local
-            string json = File.ReadAllText(RESPONSE_JSON_PATH);
-            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);
+            /*string json = File.ReadAllText(RESPONSE_JSON_PATH);
+            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);*/
 
-            reposListView.ItemsSource = myRepos;
+            //reposListView.ItemsSource = myRepos;
+
+            string json;
+            string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
+            if (File.Exists(localReposJsonPath))
+            {
+                // Load local
+                json = File.ReadAllText(localReposJsonPath);
+                jsonTypeTxt.Text = "Local";
+            }
+            else
+            {
+                RestCaller restCaller = new();
+                IRestResponse response = restCaller.GetReposResponse(token);
+                json = response.Content;
+                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
+                UpdateRemainingRequestsCount(headerDictionary);
+                File.WriteAllText(localReposJsonPath, json);
+                jsonTypeTxt.Text = "Request";
+            }
+
+            return json;
         }
 
         private void UpdateRemainingRequestsCount(Dictionary<string, string> headerDictionary)
