@@ -18,7 +18,9 @@ namespace Projects_Manager
     {
         private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
         private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
-        private static readonly string REPOS_FILE_NAME = @"repos.json";
+        private static readonly string REPOS_FILE_NAME = "repos.json";
+        private static readonly string PROJECTS_NAME_ENDING = "-Projects.json";
+        
         private string token;
 
         public MainWindow()
@@ -37,6 +39,7 @@ namespace Projects_Manager
         {
             string json;
             string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
+            
             if (File.Exists(localReposJsonPath))
             {
                 // Load local
@@ -51,6 +54,31 @@ namespace Projects_Manager
                 Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
                 UpdateRemainingRequestsCount(headerDictionary);
                 File.WriteAllText(localReposJsonPath, json);
+                jsonTypeTxt.Text = "Request";
+            }
+
+            return json;
+        }
+
+        private string GetRepoProjectsJson(string repoName)
+        {
+            string json;
+
+            string localRepoProjectsJsonPath = Path.Combine(RESPONSE_JSON_ROOT, $"{repoName}{PROJECTS_NAME_ENDING}");
+            if (File.Exists(localRepoProjectsJsonPath))
+            {
+                // Load local
+                json = File.ReadAllText(localRepoProjectsJsonPath);
+                jsonTypeTxt.Text = "Local";
+            }
+            else
+            {
+                RestCaller restCaller = new();
+                IRestResponse response = restCaller.GetRepoProjectsResponse(repoName, token);
+                json = response.Content;
+                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
+                UpdateRemainingRequestsCount(headerDictionary);
+                File.WriteAllText(localRepoProjectsJsonPath, json);
                 jsonTypeTxt.Text = "Request";
             }
 
@@ -77,6 +105,12 @@ namespace Projects_Manager
         private void OpenInChrome(string url)
         {
             Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", url);
+        }
+
+        private void OpenProjectsLink(object sender, RoutedEventArgs e)
+        {
+            Repo repo = (sender as Button).DataContext as Repo;
+            GetRepoProjectsJson(repo.Name);
         }
     }
 }

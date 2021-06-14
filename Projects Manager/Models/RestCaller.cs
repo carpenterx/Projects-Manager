@@ -11,7 +11,8 @@ namespace Projects_Manager.Models
 {
     class RestCaller
     {
-        private static readonly string userName = "carpenterx";
+        //private static readonly string userName = "carpenterx";
+        private static readonly string USER_NAME = "carpenterx";
         //private string repoName = "Readme-Generator";
 
 
@@ -68,13 +69,32 @@ namespace Projects_Manager.Models
         public IRestResponse GetReposResponse(string token)
         {
             RestClient client = new RestClient("https://api.github.com/");
-            //string token = File.ReadAllText(TOKEN_PATH);
 ;
             RestRequest request = new RestRequest(ListAuthenticatedUserRepos(), Method.GET);
             request.AddParameter("state", "all");
 
             request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
-            client.Authenticator = new HttpBasicAuthenticator(userName, token);
+            client.Authenticator = new HttpBasicAuthenticator(USER_NAME, token);
+            IRestResponse response = client.Execute(request);
+            if (response.IsSuccessful)
+            {
+                return response;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IRestResponse GetRepoProjectsResponse(string repoName, string token)
+        {
+            RestClient client = new RestClient("https://api.github.com/");
+            ;
+            RestRequest request = new RestRequest(ListRepositoryProjects(USER_NAME, repoName), Method.GET);
+            request.AddParameter("state", "all");
+
+            request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
+            client.Authenticator = new HttpBasicAuthenticator(USER_NAME, token);
             IRestResponse response = client.Execute(request);
             if (response.IsSuccessful)
             {
