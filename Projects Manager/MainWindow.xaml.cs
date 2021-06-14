@@ -135,6 +135,10 @@ namespace Projects_Manager
             {
                 OpenInChrome(repoProjects[^1].HtmlUrl);
             }
+            else
+            {
+                OpenInChrome($"{repo.HtmlUrl}/projects");
+            }
         }
     }
 }
