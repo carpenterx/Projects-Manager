@@ -31,7 +31,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Teal" BorderThickness="1" CornerRadius="4" Padding="4">
-                        <Grid ToolTip="{Binding Description}" Background="White">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
@@ -46,7 +46,7 @@
                                 <RowDefinition Height="140" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{Binding Name}" Margin="2" Padding="2"/>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}" Margin="2" Padding="2"/>
 
                             <Button Grid.Column="1" Margin="2" Visibility="{Binding Private, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
