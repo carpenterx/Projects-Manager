@@ -23,7 +23,9 @@ namespace Projects_Manager
         private static readonly string PROJECTS_NAME_ENDING = "-Projects.json";
         private static readonly string HEADERS_PART = "Headers-";
         
-        private string token;
+        private readonly string token;
+
+        private ObservableCollection<RepoInfo> repoInfos = new();
 
         public MainWindow()
         {
@@ -32,9 +34,11 @@ namespace Projects_Manager
             token = File.ReadAllText(TOKEN_PATH);
 
             string json = GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
-            ObservableCollection<Repo> myRepos = JsonConvert.DeserializeObject<ObservableCollection<Repo>>(json);
+            List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
+            List<RepoInfo> repoInfosList = myRepos.ConvertAll(r => new RepoInfo(r));
+            repoInfos = new ObservableCollection<RepoInfo>(repoInfosList);
 
-            reposListView.ItemsSource = myRepos;
+            reposListView.ItemsSource = repoInfos;
         }
 
         private string GetReposJson(string rootPath, string fileName, string headersPart)

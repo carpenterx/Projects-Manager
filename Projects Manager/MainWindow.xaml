@@ -31,7 +31,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Teal" BorderThickness="1" CornerRadius="4" Padding="4">
-                        <Grid>
+                        <Grid DataContext="{Binding Repo}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
