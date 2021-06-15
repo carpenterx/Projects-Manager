@@ -201,10 +201,10 @@ namespace Projects_Manager
             File.WriteAllText(filePath, yaml);
         }
 
-        private void MakeRepoHiddenClick(object sender, RoutedEventArgs e)
+        private void ToggleRepoVisibilityClick(object sender, RoutedEventArgs e)
         {
             RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
-            repoInfo.IsHidden = true;
+            repoInfo.IsHidden = !repoInfo.IsHidden;
             if (showHiddenProjectsCheck.IsChecked == false)
             {
                 HideHiddenProjects();
