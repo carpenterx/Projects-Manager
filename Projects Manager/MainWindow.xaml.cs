@@ -32,6 +32,7 @@ namespace Projects_Manager
         private readonly string token;
 
         private ObservableCollection<RepoInfo> allRepoInfos = new();
+        private ObservableCollection<RepoInfo> filteredRepoInfos = new();
 
         public MainWindow()
         {
@@ -59,7 +60,8 @@ namespace Projects_Manager
                 }
             }
 
-            reposListView.ItemsSource = allRepoInfos;
+            filteredRepoInfos = new ObservableCollection<RepoInfo>(allRepoInfos.Where(r => r.IsHidden == false).ToList());
+            reposListView.ItemsSource = filteredRepoInfos;
         }
 
         private ObservableCollection<T> LoadYamlFileToCollection<T>(string filePath)
