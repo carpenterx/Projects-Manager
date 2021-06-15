@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Projects_Manager.Models;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using YamlDotNet.Serialization;
 
 namespace Projects_Manager
 {
@@ -17,6 +19,10 @@ namespace Projects_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly string APPLICATION_FOLDER = "Projects Manager";
+        private static readonly string REPO_INFOS_FILE = "repo infos.yml";
+        private readonly string repoInfosPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATION_FOLDER, REPO_INFOS_FILE);
+
         private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
         private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
         private static readonly string REPOS_FILE_NAME = "repos.json";
@@ -143,6 +149,34 @@ namespace Projects_Manager
             {
                 OpenInChrome($"{repo.HtmlUrl}/projects");
             }
+        }
+
+        private void SaveData(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            string appDirectory = Path.GetDirectoryName(repoInfosPath);
+            if (!Directory.Exists(appDirectory))
+            {
+                Directory.CreateDirectory(appDirectory);
+            }
+
+            SaveCollectionToYamlFile(repoInfos, repoInfosPath);
+        }
+
+        private void SaveCollectionToYamlFile<T>(ObservableCollection<T> collection, string filePath)
+        {
+            if (collection is null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException($"'{nameof(filePath)}' cannot be null or empty.", nameof(filePath));
+            }
+
+            ISerializer serializer = new SerializerBuilder().Build();
+            string yaml = serializer.Serialize(collection);
+            File.WriteAllText(filePath, yaml);
         }
     }
 }
