@@ -30,40 +30,44 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ToolTip="{Binding Description}" Margin="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Teal" BorderThickness="1">
+                        <Grid ToolTip="{Binding Description}" Background="White">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}" Margin="4"/>
+                            <TextBlock Text="{Binding Name}" Margin="4"/>
 
-                        <Button Grid.Column="1" Margin="2" Visibility="{Binding Private, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
-                        </Button>
-                        <Button Grid.Column="2" Margin="2" Click="OpenIssuesLink">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconCodicons Kind="Issues" Foreground="Crimson" Margin="2"/>
-                                <TextBlock Text="{Binding OpenIssuesCount}" Width="20" Margin="2" TextAlignment="Right"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="3" Margin="2" Click="OpenRepoClick">
-                            <iconPacks:PackIconMaterial Kind="Github" Margin="2"/>
-                        </Button>
-                        <Button Grid.Column="4" Margin="2" Click="OpenProjectsLink">
-                            <iconPacks:PackIconBootstrapIcons Kind="Kanban" Foreground="Teal" Margin="2"/>
-                        </Button>
-                        
-                    </Grid>
+                            <Button Grid.Column="1" Margin="2" Visibility="{Binding Private, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
+                            </Button>
+                            <Button Grid.Column="2" Margin="2" Click="OpenIssuesLink">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconCodicons Kind="Issues" Foreground="Crimson" Margin="2"/>
+                                    <TextBlock Text="{Binding OpenIssuesCount}" Width="20" Margin="2" TextAlignment="Right"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Margin="2" Click="OpenRepoClick">
+                                <iconPacks:PackIconMaterial Kind="Github" Margin="2"/>
+                            </Button>
+                            <Button Grid.Column="4" Margin="2" Click="OpenProjectsLink">
+                                <iconPacks:PackIconBootstrapIcons Kind="Kanban" Foreground="Teal" Margin="2"/>
+                            </Button>
+
+                        </Grid>
+                    </Border>
+                   
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="2"/>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
