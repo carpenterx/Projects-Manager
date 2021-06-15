@@ -13,6 +13,7 @@
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:BoolToIconKindConverter x:Key="BoolToIconKindConverter"/>
+        <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -23,6 +24,7 @@
         <StackPanel Orientation="Horizontal">
             <TextBlock x:Name="requestsTxt" Margin="2"/>
             <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
+            <CheckBox x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="2" IsChecked="False"/>
             <CheckBox x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="2" IsChecked="False" Checked="ShowHiddenProjectsCheck" Unchecked="ShowHiddenProjectsUncheck"/>
         </StackPanel>
 
@@ -56,7 +58,7 @@
                                 <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
                             </Button>
 
-                            <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick">
+                            <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick" Visibility="{Binding IsChecked,ElementName=showEyeIconsCheck,Converter={StaticResource b2v}}">
                                 <iconPacks:PackIconZondicons Kind="{Binding IsHidden, Converter={StaticResource BoolToIconKindConverter}}" Foreground="DarkBlue" Margin="2"/>
                             </Button>
 
