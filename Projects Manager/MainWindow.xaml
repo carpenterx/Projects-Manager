@@ -53,19 +53,23 @@
                             <Button Grid.Column="1" Margin="2" Visibility="{Binding Repo.Private, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
                             </Button>
-                            
-                            <Button Grid.Column="2" Margin="2" Click="OpenIssuesLink">
+
+                            <Button Grid.Column="2" Margin="2">
+                                <iconPacks:PackIconZondicons Kind="ViewHide" Foreground="DarkBlue" Margin="2"/>
+                            </Button>
+
+                            <Button Grid.Column="3" Margin="2" Click="OpenIssuesLink">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconCodicons Kind="Issues" Foreground="Crimson" Margin="2"/>
                                     <TextBlock Text="{Binding Repo.OpenIssuesCount}" Width="20" Margin="2" TextAlignment="Right"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Grid.Column="3" Margin="2" Click="OpenRepoClick">
+                            <Button Grid.Column="4" Margin="2" Click="OpenRepoClick">
                                 <iconPacks:PackIconMaterial Kind="Github" Margin="2"/>
                             </Button>
                             
-                            <Button Grid.Column="4" Margin="2" Click="OpenProjectsLink">
+                            <Button Grid.Column="5" Margin="2" Click="OpenProjectsLink">
                                 <iconPacks:PackIconBootstrapIcons Kind="Kanban" Foreground="Teal" Margin="2"/>
                             </Button>
 
