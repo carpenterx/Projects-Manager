@@ -32,7 +32,6 @@ namespace Projects_Manager
         private readonly string token;
 
         private ObservableCollection<RepoInfo> allRepoInfos = new();
-        private ObservableCollection<RepoInfo> filteredRepoInfos = new();
 
         public MainWindow()
         {
@@ -45,8 +44,7 @@ namespace Projects_Manager
             ObservableCollection<RepoInfo> localRepoInfos = LoadYamlFileToCollection<RepoInfo>(repoInfosPath);
 
             List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
-            /*List<RepoInfo> repoInfosList = myRepos.ConvertAll(r => new RepoInfo(r));
-            allRepoInfos = new ObservableCollection<RepoInfo>(repoInfosList);*/
+
             foreach (Repo repo in myRepos)
             {
                 RepoInfo repoInfo = localRepoInfos.FirstOrDefault(r => r.Repo.Name == repo.Name);
@@ -60,8 +58,7 @@ namespace Projects_Manager
                 }
             }
 
-            filteredRepoInfos = new ObservableCollection<RepoInfo>(allRepoInfos.Where(r => r.IsHidden == false).ToList());
-            reposListView.ItemsSource = filteredRepoInfos;
+            HideHiddenProjects();
         }
 
         private ObservableCollection<T> LoadYamlFileToCollection<T>(string filePath)
@@ -82,7 +79,6 @@ namespace Projects_Manager
         private string GetReposJson(string rootPath, string fileName, string headersPart)
         {
             string json;
-            //string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
             string localReposJsonPath = Path.Combine(rootPath, fileName);
             
             if (File.Exists(localReposJsonPath))
@@ -123,7 +119,6 @@ namespace Projects_Manager
         {
             string json;
 
-            //string localRepoProjectsJsonPath = Path.Combine(RESPONSE_JSON_ROOT, $"{repoName}{PROJECTS_NAME_ENDING}");
             string localRepoProjectsJsonPath = Path.Combine(rootPath, $"{repoName}{projectsNameEnding}");
             if (File.Exists(localRepoProjectsJsonPath))
             {
@@ -136,11 +131,6 @@ namespace Projects_Manager
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetRepoProjectsResponse(repoName, token);
                 json = StoreResponseLocally(response, rootPath, $"{repoName}{projectsNameEnding}", headersPart);
-                /*json = response.Content;
-                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                UpdateRemainingRequestsCount(headerDictionary);
-                File.WriteAllText(localRepoProjectsJsonPath, json);
-                jsonTypeTxt.Text = "Request";*/
             }
 
             return json;
@@ -215,6 +205,30 @@ namespace Projects_Manager
         {
             RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
             repoInfo.IsHidden = true;
+            if (showHiddenProjectsCheck.IsChecked == false)
+            {
+                HideHiddenProjects();
+            }
+        }
+
+        private void ShowHiddenProjectsCheck(object sender, RoutedEventArgs e)
+        {
+            ShowHiddenProjects();
+        }
+
+        private void ShowHiddenProjectsUncheck(object sender, RoutedEventArgs e)
+        {
+            HideHiddenProjects();
+        }
+
+        private void ShowHiddenProjects()
+        {
+            reposListView.ItemsSource = new ObservableCollection<RepoInfo>(allRepoInfos);
+        }
+
+        private void HideHiddenProjects()
+        {
+            reposListView.ItemsSource = new ObservableCollection<RepoInfo>(allRepoInfos.Where(r => r.IsHidden == false));
         }
     }
 }

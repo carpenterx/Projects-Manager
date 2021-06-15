@@ -22,6 +22,7 @@
         <StackPanel Orientation="Horizontal">
             <TextBlock x:Name="requestsTxt" Margin="2"/>
             <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
+            <CheckBox x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="2" IsChecked="False" Checked="ShowHiddenProjectsCheck" Unchecked="ShowHiddenProjectsUncheck"/>
         </StackPanel>
 
         <ListView Grid.Row="1" x:Name="reposListView" Margin="2" SelectionMode="Single" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
