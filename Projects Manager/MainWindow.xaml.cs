@@ -151,14 +151,14 @@ namespace Projects_Manager
 
         private void OpenIssuesLink(object sender, RoutedEventArgs e)
         {
-            Repo repo = (sender as Button).DataContext as Repo;
-            OpenInChrome($"{repo.HtmlUrl}/issues");
+            RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
+            OpenInChrome($"{repoInfo.Repo.HtmlUrl}/issues");
         }
 
         private void OpenRepoClick(object sender, RoutedEventArgs e)
         {
-            Repo repo = (sender as Button).DataContext as Repo;
-            OpenInChrome(repo.HtmlUrl);
+            RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
+            OpenInChrome(repoInfo.Repo.HtmlUrl);
         }
 
         private void OpenInChrome(string url)
@@ -168,8 +168,8 @@ namespace Projects_Manager
 
         private void OpenProjectsLink(object sender, RoutedEventArgs e)
         {
-            Repo repo = (sender as Button).DataContext as Repo;
-            string json = GetRepoProjectsJson(RESPONSE_JSON_ROOT,repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
+            RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
+            string json = GetRepoProjectsJson(RESPONSE_JSON_ROOT, repoInfo.Repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
             List<Project> repoProjects = JsonConvert.DeserializeObject<List<Project>>(json);
             if (repoProjects.Count > 0)
             {
@@ -177,7 +177,7 @@ namespace Projects_Manager
             }
             else
             {
-                OpenInChrome($"{repo.HtmlUrl}/projects");
+                OpenInChrome($"{repoInfo.Repo.HtmlUrl}/projects");
             }
         }
 
@@ -207,6 +207,12 @@ namespace Projects_Manager
             ISerializer serializer = new SerializerBuilder().Build();
             string yaml = serializer.Serialize(collection);
             File.WriteAllText(filePath, yaml);
+        }
+
+        private void MakeRepoHiddenClick(object sender, RoutedEventArgs e)
+        {
+            RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
+            repoInfo.IsHidden = true;
         }
     }
 }
