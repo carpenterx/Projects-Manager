@@ -18,5 +18,12 @@ namespace Projects_Manager.Models
             Notes = "";
             IsHidden = isHidden;
         }
+
+        public RepoInfo()
+        {
+            Repo = null;
+            Notes = "";
+            IsHidden = false;
+        }
     }
 }

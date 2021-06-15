@@ -31,7 +31,7 @@ namespace Projects_Manager
         
         private readonly string token;
 
-        private ObservableCollection<RepoInfo> repoInfos = new();
+        private ObservableCollection<RepoInfo> allRepoInfos = new();
 
         public MainWindow()
         {
@@ -40,11 +40,41 @@ namespace Projects_Manager
             token = File.ReadAllText(TOKEN_PATH);
 
             string json = GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
-            List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
-            List<RepoInfo> repoInfosList = myRepos.ConvertAll(r => new RepoInfo(r));
-            repoInfos = new ObservableCollection<RepoInfo>(repoInfosList);
 
-            reposListView.ItemsSource = repoInfos;
+            ObservableCollection<RepoInfo> localRepoInfos = LoadYamlFileToCollection<RepoInfo>(repoInfosPath);
+
+            List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
+            /*List<RepoInfo> repoInfosList = myRepos.ConvertAll(r => new RepoInfo(r));
+            allRepoInfos = new ObservableCollection<RepoInfo>(repoInfosList);*/
+            foreach (Repo repo in myRepos)
+            {
+                RepoInfo repoInfo = localRepoInfos.FirstOrDefault(r => r.Repo.Name == repo.Name);
+                if (repoInfo == null)
+                {
+                    allRepoInfos.Add(new RepoInfo(repo));
+                }
+                else
+                {
+                    allRepoInfos.Add(repoInfo);
+                }
+            }
+
+            reposListView.ItemsSource = allRepoInfos;
+        }
+
+        private ObservableCollection<T> LoadYamlFileToCollection<T>(string filePath)
+        {
+            ObservableCollection<T> list = new();
+            if (File.Exists(filePath))
+            {
+                var input = new StringReader(File.ReadAllText(filePath));
+                var deserializer = new DeserializerBuilder().Build();
+
+                ObservableCollection<T> items = deserializer.Deserialize<ObservableCollection<T>>(input);
+                list = new ObservableCollection<T>(items);
+            }
+
+            return list;
         }
 
         private string GetReposJson(string rootPath, string fileName, string headersPart)
@@ -159,7 +189,7 @@ namespace Projects_Manager
                 Directory.CreateDirectory(appDirectory);
             }
 
-            SaveCollectionToYamlFile(repoInfos, repoInfosPath);
+            SaveCollectionToYamlFile(allRepoInfos, repoInfosPath);
         }
 
         private void SaveCollectionToYamlFile<T>(ObservableCollection<T> collection, string filePath)
