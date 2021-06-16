@@ -6,14 +6,16 @@
         xmlns:local="clr-namespace:Projects_Manager.Windows"
         xmlns:properties="clr-namespace:Projects_Manager.Properties"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
-    <Grid>
+        Title="Settings" Height="600" Width="400">
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <CheckBox x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="2" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowEyeIcons, Mode=TwoWay}"/>
-        <CheckBox Grid.Row="1" x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="2"
-                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowHiddenProjects, Mode=TwoWay}"/>
+        <Label Content="Settings" FontSize="28" HorizontalAlignment="Center" Margin="10,30,10,20"/>
+        <CheckBox Grid.Row="1" x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="30,4,30,4" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowEyeIcons, Mode=TwoWay}" FontSize="14"/>
+        <CheckBox Grid.Row="2" x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="30,4,30,4"
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowHiddenProjects, Mode=TwoWay}" FontSize="14"/>
     </Grid>
 </Window>
