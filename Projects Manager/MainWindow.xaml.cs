@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Projects_Manager.Models;
+using Projects_Manager.Properties;
 using Projects_Manager.Windows;
 using RestSharp;
 using System;
@@ -59,7 +60,7 @@ namespace Projects_Manager
                 }
             }
 
-            HideHiddenProjects();
+            UpdateProjectsDisplay();
         }
 
         private ObservableCollection<T> LoadYamlFileToCollection<T>(string filePath)
@@ -183,6 +184,7 @@ namespace Projects_Manager
             }
 
             SaveCollectionToYamlFile(allRepoInfos, repoInfosPath);
+            Settings.Default.Save();
         }
 
         private void SaveCollectionToYamlFile<T>(ObservableCollection<T> collection, string filePath)
@@ -206,21 +208,11 @@ namespace Projects_Manager
         {
             RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
             repoInfo.IsHidden = !repoInfo.IsHidden;
-            if (!Properties.Settings.Default.ShowHiddenProjects)
+            if (!Settings.Default.ShowHiddenProjects)
             {
                 HideHiddenProjects();
             }
         }
-
-        /*private void ShowHiddenProjectsCheck(object sender, RoutedEventArgs e)
-        {
-            ShowHiddenProjects();
-        }*/
-
-        /*private void ShowHiddenProjectsUncheck(object sender, RoutedEventArgs e)
-        {
-            HideHiddenProjects();
-        }*/
 
         private void ShowHiddenProjects()
         {
@@ -237,7 +229,12 @@ namespace Projects_Manager
             SettingsWindow settingsWindow = new();
             settingsWindow.Owner = this;
             settingsWindow.ShowDialog();
-            if (Properties.Settings.Default.ShowHiddenProjects)
+            UpdateProjectsDisplay();
+        }
+
+        private void UpdateProjectsDisplay()
+        {
+            if (Settings.Default.ShowHiddenProjects)
             {
                 ShowHiddenProjects();
             }
