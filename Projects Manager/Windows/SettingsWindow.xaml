@@ -12,10 +12,13 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Label Content="Settings" FontSize="28" HorizontalAlignment="Center" Margin="10,30,10,20"/>
         <CheckBox Grid.Row="1" x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="30,4,30,4" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowEyeIcons, Mode=TwoWay}" FontSize="14"/>
         <CheckBox Grid.Row="2" x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="30,4,30,4"
                   IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowHiddenProjects, Mode=TwoWay}" FontSize="14"/>
+        <CheckBox Grid.Row="3" x:Name="useLocalDataCheck" Content="Use Local Data" Margin="30,4,30,4"
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=UseLocalData, Mode=TwoWay}" FontSize="14"/>
     </Grid>
 </Window>

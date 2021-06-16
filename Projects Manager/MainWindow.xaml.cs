@@ -83,7 +83,7 @@ namespace Projects_Manager
             string json;
             string localReposJsonPath = Path.Combine(rootPath, fileName);
             
-            if (File.Exists(localReposJsonPath))
+            if (Settings.Default.UseLocalData && File.Exists(localReposJsonPath))
             {
                 // Load local
                 json = File.ReadAllText(localReposJsonPath);
@@ -122,7 +122,7 @@ namespace Projects_Manager
             string json;
 
             string localRepoProjectsJsonPath = Path.Combine(rootPath, $"{repoName}{projectsNameEnding}");
-            if (File.Exists(localRepoProjectsJsonPath))
+            if (Settings.Default.UseLocalData && File.Exists(localRepoProjectsJsonPath))
             {
                 // Load local
                 json = File.ReadAllText(localRepoProjectsJsonPath);

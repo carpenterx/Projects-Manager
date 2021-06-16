@@ -46,5 +46,17 @@ namespace Projects_Manager.Properties {
                 this["ShowHiddenProjects"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLocalData {
+            get {
+                return ((bool)(this["UseLocalData"]));
+            }
+            set {
+                this["UseLocalData"] = value;
+            }
+        }
     }
 }
