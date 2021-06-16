@@ -22,7 +22,7 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBlock x:Name="requestsTxt" Margin="2"/>
             <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
             <Button Margin="2" BorderBrush="Transparent" Background="Transparent" Click="OpenSettingsClick">
