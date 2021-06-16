@@ -39,8 +39,8 @@
                     <Border BorderBrush="Teal" BorderThickness="1" CornerRadius="4" Padding="4">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
@@ -52,11 +52,11 @@
                                 <RowDefinition Height="140" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{Binding Repo.Name}" ToolTip="{Binding Repo.Description}" Margin="2" Padding="2"/>
-
-                            <Button Grid.Column="1" Margin="2" Visibility="{Binding Repo.Private, Converter={StaticResource BoolToVisibilityConverter}}" BorderBrush="Transparent" Background="Transparent">
+                            <Button Margin="2" Visibility="{Binding Repo.Private, Converter={StaticResource b2v}}" BorderBrush="Transparent" Background="Transparent">
                                 <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
                             </Button>
+
+                            <TextBlock Grid.Column="1" Text="{Binding Repo.Name}" ToolTip="{Binding Repo.Description}" Margin="2" Padding="2"/>
 
                             <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick" Visibility="{Binding IsChecked,ElementName=showEyeIconsCheck,Converter={StaticResource b2v}}" BorderBrush="Transparent" Background="Transparent">
                                 <iconPacks:PackIconZondicons Kind="{Binding IsHidden, Converter={StaticResource BoolToIconKindConverter}}" Foreground="DarkBlue" Margin="2"/>
