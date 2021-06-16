@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projects_Manager"
         xmlns:models="clr-namespace:Projects_Manager.Models"
+        xmlns:properties="clr-namespace:Projects_Manager.Properties"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Projects Manager"
@@ -24,8 +25,6 @@
         <StackPanel Orientation="Horizontal">
             <TextBlock x:Name="requestsTxt" Margin="2"/>
             <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
-            <CheckBox x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="2" IsChecked="False"/>
-            <CheckBox x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="2" IsChecked="False" Checked="ShowHiddenProjectsCheck" Unchecked="ShowHiddenProjectsUncheck"/>
             <Button Margin="2" BorderBrush="Transparent" Background="Transparent" Click="OpenSettingsClick">
                 <iconPacks:PackIconVaadinIcons Kind="CogOutline" Margin="2"/>
             </Button>
@@ -61,7 +60,7 @@
 
                             <TextBlock Grid.Column="1" Text="{Binding Repo.Name}" ToolTip="{Binding Repo.Description}" Margin="2" Padding="2"/>
 
-                            <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick" Visibility="{Binding IsChecked,ElementName=showEyeIconsCheck,Converter={StaticResource b2v}}" BorderBrush="Transparent" Background="Transparent">
+                            <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowEyeIcons, Converter={StaticResource b2v}}" BorderBrush="Transparent" Background="Transparent">
                                 <iconPacks:PackIconZondicons Kind="{Binding IsHidden, Converter={StaticResource BoolToIconKindConverter}}" Foreground="DarkBlue" Margin="2"/>
                             </Button>
 

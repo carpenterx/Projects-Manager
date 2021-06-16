@@ -206,21 +206,21 @@ namespace Projects_Manager
         {
             RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
             repoInfo.IsHidden = !repoInfo.IsHidden;
-            if (showHiddenProjectsCheck.IsChecked == false)
+            if (!Properties.Settings.Default.ShowHiddenProjects)
             {
                 HideHiddenProjects();
             }
         }
 
-        private void ShowHiddenProjectsCheck(object sender, RoutedEventArgs e)
+        /*private void ShowHiddenProjectsCheck(object sender, RoutedEventArgs e)
         {
             ShowHiddenProjects();
-        }
+        }*/
 
-        private void ShowHiddenProjectsUncheck(object sender, RoutedEventArgs e)
+        /*private void ShowHiddenProjectsUncheck(object sender, RoutedEventArgs e)
         {
             HideHiddenProjects();
-        }
+        }*/
 
         private void ShowHiddenProjects()
         {
@@ -236,9 +236,14 @@ namespace Projects_Manager
         {
             SettingsWindow settingsWindow = new();
             settingsWindow.Owner = this;
-            if (settingsWindow.ShowDialog() == true)
+            settingsWindow.ShowDialog();
+            if (Properties.Settings.Default.ShowHiddenProjects)
             {
-                //
+                ShowHiddenProjects();
+            }
+            else
+            {
+                HideHiddenProjects();
             }
         }
     }
