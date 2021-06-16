@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Projects_Manager.Models;
+using Projects_Manager.Windows;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -229,6 +230,16 @@ namespace Projects_Manager
         private void HideHiddenProjects()
         {
             reposListView.ItemsSource = new ObservableCollection<RepoInfo>(allRepoInfos.Where(r => r.IsHidden == false));
+        }
+
+        private void OpenSettingsClick(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new();
+            settingsWindow.Owner = this;
+            if (settingsWindow.ShowDialog() == true)
+            {
+                //
+            }
         }
     }
 }

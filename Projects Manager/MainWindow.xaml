@@ -26,6 +26,9 @@
             <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
             <CheckBox x:Name="showEyeIconsCheck" Content="Show Eye Icons" Margin="2" IsChecked="False"/>
             <CheckBox x:Name="showHiddenProjectsCheck" Content="Show Hidden Projects" Margin="2" IsChecked="False" Checked="ShowHiddenProjectsCheck" Unchecked="ShowHiddenProjectsUncheck"/>
+            <Button Margin="2" BorderBrush="Transparent" Background="Transparent" Click="OpenSettingsClick">
+                <iconPacks:PackIconVaadinIcons Kind="CogOutline" Margin="2"/>
+            </Button>
         </StackPanel>
 
         <ListView Grid.Row="1" x:Name="reposListView" Margin="2" SelectionMode="Single" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
