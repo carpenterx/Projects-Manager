@@ -10,8 +10,13 @@ namespace Projects_Manager.Models
     {
         public Repo Repo { get; set; }
 
+        private string _notes;
         [YamlMember(ScalarStyle = ScalarStyle.Literal)]
-        public string Notes { get; set; }
+        public string Notes
+        {
+            get => _notes;
+            set => SetField(ref _notes, value);
+        }
 
         private bool _isHidden;
         public bool IsHidden
