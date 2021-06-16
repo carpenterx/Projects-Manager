@@ -5,6 +5,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>Projects_Manager</RootNamespace>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Projects Manager icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
