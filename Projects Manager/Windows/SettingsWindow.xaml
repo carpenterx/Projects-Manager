@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:Projects_Manager.Windows"
         xmlns:properties="clr-namespace:Projects_Manager.Properties"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
         Title="Settings" Height="600" Width="400">
     <Grid Margin="4">
         <Grid.RowDefinitions>
