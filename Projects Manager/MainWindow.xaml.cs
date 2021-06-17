@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using YamlDotNet.Serialization;
 
 namespace Projects_Manager
@@ -241,6 +242,32 @@ namespace Projects_Manager
             else
             {
                 HideHiddenProjects();
+            }
+        }
+
+        private void FindRepoClick(object sender, RoutedEventArgs e)
+        {
+            FindRepo();
+        }
+
+        private void OnKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                FindRepo();
+            }
+        }
+
+        private void FindRepo()
+        {
+            foreach (var item in reposListView.Items)
+            {
+                RepoInfo repoInfo = item as RepoInfo;
+                if (repoInfo.Repo.Name.ToLowerInvariant().Contains(searchTxt.Text.ToLowerInvariant()))
+                {
+                    reposListView.ScrollIntoView(item);
+                    break;
+                }
             }
         }
     }

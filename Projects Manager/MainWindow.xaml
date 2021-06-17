@@ -22,11 +22,31 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock x:Name="requestsTxt" Margin="2"/>
-            <TextBlock x:Name="jsonTypeTxt" Margin="2"/>
-            <Button Margin="2" BorderBrush="Transparent" Background="Transparent" Click="OpenSettingsClick">
-                <iconPacks:PackIconVaadinIcons Kind="CogOutline" Margin="2"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Grid>
+                    <TextBox x:Name="searchTxt" Width="160" VerticalContentAlignment="Center" KeyDown="OnKeyDownHandler" Padding="2" Margin="2" />
+                    <TextBox IsHitTestVisible="False" Width="160" Text="Search" VerticalContentAlignment="Center" Padding="2" Margin="2" Foreground="DarkGray" Background="Transparent" BorderBrush="Transparent">
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=searchTxt}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+                <Button Margin="2" Background="Transparent" Click="FindRepoClick">
+                    <iconPacks:PackIconBootstrapIcons Kind="Search" Margin="4" />
+                </Button>
+            </StackPanel>
+            <TextBlock x:Name="requestsTxt" Margin="2" VerticalAlignment="Center"/>
+            <TextBlock x:Name="jsonTypeTxt" Margin="2" VerticalAlignment="Center"/>
+            <Button Margin="2" Background="Transparent" Click="OpenSettingsClick">
+                <iconPacks:PackIconVaadinIcons Kind="CogOutline" Margin="4"/>
             </Button>
         </StackPanel>
 
