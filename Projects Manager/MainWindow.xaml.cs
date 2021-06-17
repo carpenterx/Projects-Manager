@@ -260,12 +260,14 @@ namespace Projects_Manager
 
         private void FindRepo()
         {
+            string searchTerm = searchTxt.Text.ToLowerInvariant();
             foreach (var item in reposListView.Items)
             {
                 RepoInfo repoInfo = item as RepoInfo;
-                if (repoInfo.Repo.Name.ToLowerInvariant().Contains(searchTxt.Text.ToLowerInvariant()))
+                if (repoInfo.Repo.Name.ToLowerInvariant().Contains(searchTerm))
                 {
                     reposListView.ScrollIntoView(item);
+                    reposListView.SelectedItem = item;
                     break;
                 }
             }
