@@ -14,6 +14,7 @@
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:BoolToIconKindConverter x:Key="BoolToIconKindConverter"/>
+        <models:HumanizedNameConverter x:Key="HumanizedNameConverter"/>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
     <Grid>
@@ -78,7 +79,7 @@
                                 <iconPacks:PackIconBootstrapIcons Kind="ShieldCheck" Foreground="Green" Margin="2"/>
                             </Button>
 
-                            <TextBlock Grid.Column="1" Text="{Binding Repo.Name}" ToolTip="{Binding Repo.Description}" Margin="2" Padding="2"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Repo.Name, Converter={StaticResource HumanizedNameConverter}}" ToolTip="{Binding Repo.Description}" Margin="2" Padding="2"/>
 
                             <Button Grid.Column="2" Margin="2" Click="ToggleRepoVisibilityClick" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ShowEyeIcons, Converter={StaticResource b2v}}" BorderBrush="Transparent" Background="Transparent">
                                 <iconPacks:PackIconZondicons Kind="{Binding IsHidden, Converter={StaticResource BoolToIconKindConverter}}" Foreground="DarkBlue" Margin="2"/>
