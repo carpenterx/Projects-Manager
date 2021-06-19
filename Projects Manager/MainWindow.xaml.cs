@@ -57,7 +57,7 @@ namespace Projects_Manager
                 }
                 else
                 {
-                    allRepoInfos.Add(repoInfo);
+                    allRepoInfos.Add(new RepoInfo(repo, repoInfo.IsHidden, repoInfo.Notes));
                 }
             }
 

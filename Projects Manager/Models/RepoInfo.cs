@@ -44,10 +44,10 @@ namespace Projects_Manager.Models
             return true;
         }
 
-        public RepoInfo(Repo repo, bool isHidden = false)
+        public RepoInfo(Repo repo, bool isHidden = false, string notes = "")
         {
             Repo = repo;
-            Notes = "";
+            Notes = notes;
             IsHidden = isHidden;
         }
 
