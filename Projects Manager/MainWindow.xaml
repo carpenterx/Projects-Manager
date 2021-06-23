@@ -46,6 +46,9 @@
             </StackPanel>
             <TextBlock x:Name="requestsTxt" Margin="2" VerticalAlignment="Center"/>
             <TextBlock x:Name="jsonTypeTxt" Margin="2" VerticalAlignment="Center"/>
+            <Button x:Name="refreshBtn" Margin="2" Background="Transparent" Click="RetryConnectionClick">
+                <iconPacks:PackIconBootstrapIcons Kind="ArrowClockwise" Margin="4"/>
+            </Button>
             <Button Margin="2" Background="Transparent" Click="OpenSettingsClick">
                 <iconPacks:PackIconVaadinIcons Kind="CogOutline" Margin="4"/>
             </Button>

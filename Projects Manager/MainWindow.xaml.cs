@@ -47,6 +47,13 @@ namespace Projects_Manager
 
             string json = GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
 
+            MergeProjectsData(json);
+
+            UpdateProjectsDisplay();
+        }
+
+        private void MergeProjectsData(string json)
+        {
             ObservableCollection<RepoInfo> localRepoInfos = LoadYamlFileToCollection<RepoInfo>(repoInfosPath);
 
             List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
@@ -63,8 +70,6 @@ namespace Projects_Manager
                     allRepoInfos.Add(new RepoInfo(repo, repoInfo.IsHidden, repoInfo.Notes));
                 }
             }
-
-            UpdateProjectsDisplay();
         }
 
         private ObservableCollection<T> LoadYamlFileToCollection<T>(string filePath)
@@ -90,15 +95,29 @@ namespace Projects_Manager
             if ((Settings.Default.UseLocalData && File.Exists(localReposJsonPath)) || !internet.IsConnected())
             {
                 // Load local
+                refreshBtn.Visibility = Visibility.Visible;
                 json = File.ReadAllText(localReposJsonPath);
                 jsonTypeTxt.Text = "Local";
             }
             else
             {
+                refreshBtn.Visibility = Visibility.Collapsed;
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetReposResponse(token);
                 json = StoreResponseLocally(response, rootPath, fileName, headersPart);
             }
+
+            return json;
+        }
+
+        private string GetOnlineReposJson(string rootPath, string fileName, string headersPart)
+        {
+            string json;
+
+            refreshBtn.Visibility = Visibility.Collapsed;
+            RestCaller restCaller = new();
+            IRestResponse response = restCaller.GetReposResponse(token);
+            json = StoreResponseLocally(response, rootPath, fileName, headersPart);
 
             return json;
         }
@@ -129,11 +148,13 @@ namespace Projects_Manager
             if ((Settings.Default.UseLocalData && File.Exists(localRepoProjectsJsonPath)) || !internet.IsConnected())
             {
                 // Load local
+                refreshBtn.Visibility = Visibility.Visible;
                 json = File.ReadAllText(localRepoProjectsJsonPath);
                 jsonTypeTxt.Text = "Local";
             }
             else
             {
+                refreshBtn.Visibility = Visibility.Collapsed;
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetRepoProjectsResponse(repoName, token);
                 json = StoreResponseLocally(response, rootPath, $"{repoName}{projectsNameEnding}", headersPart);
@@ -273,6 +294,18 @@ namespace Projects_Manager
                     reposListView.SelectedItem = item;
                     break;
                 }
+            }
+        }
+
+        private void RetryConnectionClick(object sender, RoutedEventArgs e)
+        {
+            if (internet.IsConnected())
+            {
+                string json = GetOnlineReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
+
+                MergeProjectsData(json);
+
+                UpdateProjectsDisplay();
             }
         }
     }
