@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,8 @@ namespace Projects_Manager
         private readonly string token;
 
         private ObservableCollection<RepoInfo> allRepoInfos = new();
+
+        private InternetConnectionChecker internet = new();
 
         public MainWindow()
         {
@@ -84,7 +87,7 @@ namespace Projects_Manager
             string json;
             string localReposJsonPath = Path.Combine(rootPath, fileName);
             
-            if (Settings.Default.UseLocalData && File.Exists(localReposJsonPath))
+            if ((Settings.Default.UseLocalData && File.Exists(localReposJsonPath)) || !internet.IsConnected())
             {
                 // Load local
                 json = File.ReadAllText(localReposJsonPath);
@@ -123,7 +126,7 @@ namespace Projects_Manager
             string json;
 
             string localRepoProjectsJsonPath = Path.Combine(rootPath, $"{repoName}{projectsNameEnding}");
-            if (Settings.Default.UseLocalData && File.Exists(localRepoProjectsJsonPath))
+            if ((Settings.Default.UseLocalData && File.Exists(localRepoProjectsJsonPath)) || !internet.IsConnected())
             {
                 // Load local
                 json = File.ReadAllText(localRepoProjectsJsonPath);
