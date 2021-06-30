@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -23,15 +24,15 @@ namespace Projects_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string APPLICATION_FOLDER = "Projects Manager";
-        private static readonly string REPO_INFOS_FILE = "repo infos.yml";
+        private const string APPLICATION_FOLDER = "Projects Manager";
+        private const string REPO_INFOS_FILE = "repo infos.yml";
         private readonly string repoInfosPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATION_FOLDER, REPO_INFOS_FILE);
 
-        private static readonly string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
-        private static readonly string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
-        private static readonly string REPOS_FILE_NAME = "repos.json";
-        private static readonly string PROJECTS_NAME_ENDING = "-Projects.json";
-        private static readonly string HEADERS_PART = "Headers-";
+        private const string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
+        private const string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
+        private const string REPOS_FILE_NAME = "repos.json";
+        private const string PROJECTS_NAME_ENDING = "-Projects.json";
+        private const string HEADERS_PART = "Headers-";
         
         private readonly string token;
 
@@ -45,7 +46,7 @@ namespace Projects_Manager
 
             token = File.ReadAllText(TOKEN_PATH);
 
-            List<string> json = GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
+            List<string> json = GetReposJson();
 
             MergeProjectsData(json);
 
@@ -91,10 +92,11 @@ namespace Projects_Manager
             return list;
         }
 
-        private List<string> GetReposJson(string rootPath, string fileName, string headersPart)
+        //GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
+        private List<string> GetReposJson()
         {
             List<string> json = new();
-            string localReposJsonPath = Path.Combine(rootPath, fileName);
+            string localReposJsonPath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
             
             if ((Settings.Default.UseLocalData && File.Exists(localReposJsonPath)) || !internet.IsConnected())
             {
@@ -105,10 +107,11 @@ namespace Projects_Manager
             }
             else
             {
-                refreshBtn.Visibility = Visibility.Collapsed;
-                
+                //refreshBtn.Visibility = Visibility.Collapsed;
+
                 //StoreResponseLocally(response, rootPath, fileName, headersPart);
-                json = GetReposPageJson();
+                //json = GetReposPageJson();
+                json = GetOnlineReposJson();
             }
 
             return json;
@@ -118,13 +121,16 @@ namespace Projects_Manager
         {
             string linkHeader;
             string page = "1";
+            IRestResponse response;
+            Dictionary<string, string> headerDictionary;
             List<string> json = new();
             do
             {
                 RestCaller restCaller = new();
-                IRestResponse response = restCaller.GetReposResponse(token, page);
-                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                UpdateRemainingRequestsCount(headerDictionary);
+                response = restCaller.GetReposResponse(token, page);
+                json.Add(response.Content);
+                headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
+                //UpdateRemainingRequestsCount(headerDictionary);
                 if (headerDictionary.ContainsKey("Link"))
                 {
                     linkHeader = headerDictionary["Link"];
@@ -134,9 +140,21 @@ namespace Projects_Manager
                 {
                     page = "";
                 }
-                json.Add(response.Content);
             }
             while (page != "");
+
+            UpdateRemainingRequestsCount(headerDictionary);
+            string responsePath = Path.Combine(RESPONSE_JSON_ROOT, REPOS_FILE_NAME);
+            File.WriteAllText(responsePath, JsonConvert.SerializeObject(json));
+            string headersPath = Path.Combine(RESPONSE_JSON_ROOT, $"{HEADERS_PART}{REPOS_FILE_NAME}");
+            StringBuilder headersBuilder = new();
+            foreach (var header in response.Headers)
+            {
+                headersBuilder.AppendLine($"{header.Name}: {header.Value}");
+            }
+            File.WriteAllText(headersPath, headersBuilder.ToString());
+            jsonTypeTxt.Text = "Request";
+
             return json;
         }
 
@@ -154,7 +172,8 @@ namespace Projects_Manager
             }
         }
 
-        private List<string> GetOnlineReposJson(string rootPath, string fileName, string headersPart)
+        //GetOnlineReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
+        private List<string> GetOnlineReposJson()
         {
             refreshBtn.Visibility = Visibility.Collapsed;
             //StoreResponseLocally(response, rootPath, fileName, headersPart);
@@ -162,14 +181,14 @@ namespace Projects_Manager
             return GetReposPageJson();
         }
 
-        private void StoreResponseLocally(IRestResponse response, string rootPath, string fileName, string headersPart)
+        private void StoreResponseLocally(IRestResponse response, string fileName)
         {
             string json = response.Content;
             Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
             UpdateRemainingRequestsCount(headerDictionary);
-            string responsePath = Path.Combine(rootPath, fileName);
+            string responsePath = Path.Combine(RESPONSE_JSON_ROOT, fileName);
             File.WriteAllText(responsePath, json);
-            string headersPath = Path.Combine(rootPath, $"{headersPart}{fileName}");
+            string headersPath = Path.Combine(RESPONSE_JSON_ROOT, $"{HEADERS_PART}{fileName}");
             StringBuilder headersBuilder = new();
             foreach (var header in response.Headers)
             {
@@ -179,11 +198,11 @@ namespace Projects_Manager
             jsonTypeTxt.Text = "Request";
         }
 
-        private string GetRepoProjectsJson(string rootPath, string repoName, string projectsNameEnding, string headersPart)
+        private string GetRepoProjectsJson(string repoName)
         {
             string json;
 
-            string localRepoProjectsJsonPath = Path.Combine(rootPath, $"{repoName}{projectsNameEnding}");
+            string localRepoProjectsJsonPath = Path.Combine(RESPONSE_JSON_ROOT, $"{repoName}{PROJECTS_NAME_ENDING}");
             if ((Settings.Default.UseLocalData && File.Exists(localRepoProjectsJsonPath)) || !internet.IsConnected())
             {
                 // Load local
@@ -197,7 +216,7 @@ namespace Projects_Manager
                 RestCaller restCaller = new();
                 IRestResponse response = restCaller.GetRepoProjectsResponse(repoName, token);
                 json = response.Content;
-                StoreResponseLocally(response, rootPath, $"{repoName}{projectsNameEnding}", headersPart);
+                StoreResponseLocally(response, $"{repoName}{PROJECTS_NAME_ENDING}");
             }
 
             return json;
@@ -228,7 +247,7 @@ namespace Projects_Manager
         private void OpenProjectsLink(object sender, RoutedEventArgs e)
         {
             RepoInfo repoInfo = (sender as Button).DataContext as RepoInfo;
-            string json = GetRepoProjectsJson(RESPONSE_JSON_ROOT, repoInfo.Repo.Name, PROJECTS_NAME_ENDING, HEADERS_PART);
+            string json = GetRepoProjectsJson(repoInfo.Repo.Name);
             List<Project> repoProjects = JsonConvert.DeserializeObject<List<Project>>(json);
             if (repoProjects.Count > 0)
             {
@@ -341,7 +360,7 @@ namespace Projects_Manager
         {
             if (internet.IsConnected())
             {
-                List<string> json = GetOnlineReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
+                List<string> json = GetOnlineReposJson();
 
                 MergeProjectsData(json);
 
