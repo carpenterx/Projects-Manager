@@ -36,7 +36,7 @@ namespace Projects_Manager
         
         private readonly string token;
 
-        private ObservableCollection<RepoInfo> allRepoInfos = new();
+        private ObservableCollection<RepoInfo> allRepoInfos;
 
         private InternetConnectionChecker internet = new();
 
@@ -58,6 +58,7 @@ namespace Projects_Manager
             ObservableCollection<RepoInfo> localRepoInfos = LoadYamlFileToCollection<RepoInfo>(repoInfosPath);
 
             List<Repo> myRepos = new();
+            allRepoInfos = new();
             foreach (string response in json)
             {
                 myRepos.AddRange(JsonConvert.DeserializeObject<List<Repo>>(response));
