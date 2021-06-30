@@ -11,9 +11,7 @@ namespace Projects_Manager.Models
 {
     class RestCaller
     {
-        //private static readonly string userName = "carpenterx";
-        private static readonly string USER_NAME = "carpenterx";
-        //private string repoName = "Readme-Generator";
+        private const string USER_NAME = "carpenterx";
 
 
         /*public string GetRestResponse()
@@ -66,12 +64,14 @@ namespace Projects_Manager.Models
             //return response.StatusCode.ToString();
         }*/
 
-        public IRestResponse GetReposResponse(string token)
+        public IRestResponse GetReposResponse(string token, string page = "1")
         {
             RestClient client = new RestClient("https://api.github.com/");
 ;
             RestRequest request = new RestRequest(ListAuthenticatedUserRepos(), Method.GET);
-            request.AddParameter("state", "all");
+            //request.AddParameter("state", "all");
+            request.AddParameter("per_page", "100");
+            request.AddParameter("page", page);
 
             request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
             client.Authenticator = new HttpBasicAuthenticator(USER_NAME, token);
