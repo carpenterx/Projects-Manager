@@ -9,14 +9,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using YamlDotNet.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Projects_Manager
 {
@@ -58,7 +56,6 @@ namespace Projects_Manager
         {
             ObservableCollection<RepoInfo> localRepoInfos = LoadYamlFileToCollection<RepoInfo>(repoInfosPath);
 
-            //List<Repo> myRepos = JsonConvert.DeserializeObject<List<Repo>>(json);
             List<Repo> myRepos = new();
             foreach (string response in json)
             {
@@ -103,15 +100,12 @@ namespace Projects_Manager
             {
                 // Load local
                 refreshBtn.Visibility = Visibility.Visible;
-                //List<string> = File.ReadAllText(localReposJsonPath);
                 json = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(localReposJsonPath));
                 jsonTypeTxt.Text = "Local";
             }
             else
             {
                 refreshBtn.Visibility = Visibility.Collapsed;
-                //RestCaller restCaller = new();
-                //IRestResponse response = restCaller.GetReposResponse(token);
                 
                 //StoreResponseLocally(response, rootPath, fileName, headersPart);
                 json = GetReposPageJson();
@@ -163,11 +157,7 @@ namespace Projects_Manager
         private List<string> GetOnlineReposJson(string rootPath, string fileName, string headersPart)
         {
             refreshBtn.Visibility = Visibility.Collapsed;
-            //RestCaller restCaller = new();
-            //IRestResponse response = restCaller.GetReposResponse(token);
             //StoreResponseLocally(response, rootPath, fileName, headersPart);
-
-            //return response.Content;
 
             return GetReposPageJson();
         }
@@ -176,10 +166,6 @@ namespace Projects_Manager
         {
             string json = response.Content;
             Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-            /*if (headerDictionary["Link"].Contains(">; rel=\"next\""))
-            {
-
-            }*/
             UpdateRemainingRequestsCount(headerDictionary);
             string responsePath = Path.Combine(rootPath, fileName);
             File.WriteAllText(responsePath, json);
@@ -191,7 +177,6 @@ namespace Projects_Manager
             }
             File.WriteAllText(headersPath, headersBuilder.ToString());
             jsonTypeTxt.Text = "Request";
-            //return json;
         }
 
         private string GetRepoProjectsJson(string rootPath, string repoName, string projectsNameEnding, string headersPart)
