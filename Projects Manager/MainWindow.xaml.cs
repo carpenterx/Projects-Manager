@@ -93,7 +93,6 @@ namespace Projects_Manager
             return list;
         }
 
-        //GetReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
         private List<string> GetReposJson()
         {
             List<string> json = new();
@@ -108,10 +107,6 @@ namespace Projects_Manager
             }
             else
             {
-                //refreshBtn.Visibility = Visibility.Collapsed;
-
-                //StoreResponseLocally(response, rootPath, fileName, headersPart);
-                //json = GetReposPageJson();
                 json = GetOnlineReposJson();
             }
 
@@ -131,7 +126,6 @@ namespace Projects_Manager
                 response = restCaller.GetReposResponse(token, page);
                 json.Add(response.Content);
                 headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                //UpdateRemainingRequestsCount(headerDictionary);
                 if (headerDictionary.ContainsKey("Link"))
                 {
                     linkHeader = headerDictionary["Link"];
@@ -173,11 +167,9 @@ namespace Projects_Manager
             }
         }
 
-        //GetOnlineReposJson(RESPONSE_JSON_ROOT, REPOS_FILE_NAME, HEADERS_PART);
         private List<string> GetOnlineReposJson()
         {
             refreshBtn.Visibility = Visibility.Collapsed;
-            //StoreResponseLocally(response, rootPath, fileName, headersPart);
 
             return GetReposPageJson();
         }
