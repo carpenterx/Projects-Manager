@@ -8,7 +8,9 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="Settings" Height="600" Width="400">
+        Title="Settings"
+        Height="600" Width="400"
+        KeyDown="HideSettingsKeyDown">
     <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

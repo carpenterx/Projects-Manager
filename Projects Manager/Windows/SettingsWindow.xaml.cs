@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Projects_Manager.Windows
 {
@@ -10,6 +11,14 @@ namespace Projects_Manager.Windows
         public SettingsWindow()
         {
             InitializeComponent();
+        }
+
+        private void HideSettingsKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         }
     }
 }

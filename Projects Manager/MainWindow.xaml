@@ -10,7 +10,8 @@
         mc:Ignorable="d"
         Title="Projects Manager"
         Height="600" Width="1000"
-        Closing="SaveData">
+        Closing="SaveData"
+        KeyDown="ShowSettingsKeyDown">
     <Window.Resources>
         <models:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <models:BoolToIconKindConverter x:Key="BoolToIconKindConverter"/>

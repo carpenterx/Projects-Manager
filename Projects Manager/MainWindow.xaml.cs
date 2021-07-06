@@ -303,10 +303,7 @@ namespace Projects_Manager
 
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new();
-            settingsWindow.Owner = this;
-            settingsWindow.ShowDialog();
-            UpdateProjectsDisplay();
+            ShowSettings();
         }
 
         private void UpdateProjectsDisplay()
@@ -359,6 +356,22 @@ namespace Projects_Manager
 
                 UpdateProjectsDisplay();
             }
+        }
+
+        private void ShowSettingsKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                ShowSettings();
+            }
+        }
+
+        private void ShowSettings()
+        {
+            SettingsWindow settingsWindow = new();
+            settingsWindow.Owner = this;
+            settingsWindow.ShowDialog();
+            UpdateProjectsDisplay();
         }
     }
 }
