@@ -1,68 +1,13 @@
-﻿using RestSharp;
+﻿using Projects_Manager.Properties;
+using RestSharp;
 using RestSharp.Authenticators;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects_Manager.Models
 {
     class RestCaller
     {
-        private const string USER_NAME = "carpenterx";
-
-
-        /*public string GetRestResponse()
-        {
-            RestClient client = new RestClient("https://api.github.com/");
-            string token = File.ReadAllText(TOKEN_PATH);
-
-            //RestRequest request = new RestRequest(ListRepositoryProjects(userName, repoName), Method.GET);
-            //RestRequest request = new RestRequest(ListRepositoryIssues(userName, repoName), Method.GET);
-            RestRequest request = new RestRequest(ListUserRepos(userName), Method.GET);
-            //RestRequest request = new RestRequest(ListProjects(userName), Method.GET);
-            //RestRequest request = new RestRequest(GetProjectColumns("12568899"), Method.GET);
-            //RestRequest request = new RestRequest(ListProjectCards("14528745"), Method.GET);
-            //RestRequest request = new RestRequest(GetEmojis(), Method.GET);
-            request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
-            client.Authenticator = new HttpBasicAuthenticator(userName, token);
-            IRestResponse response = client.Execute(request);
-            if (response.IsSuccessful)
-            {
-                //return response.Content.ToString();
-                StringBuilder responseBuilder = new();
-                //responseBuilder.AppendLine(response.Headers[])
-                Dictionary<string, string> headerDictionary = response.Headers.ToDictionary(h => h.Name, h => h.Value.ToString());
-                *//*foreach (var header in response.Headers)
-                {
-                    responseBuilder.AppendLine($"{header.Name}: {header.Value}");
-                }*//*
-                responseBuilder.AppendLine($"Remaining requests: {headerDictionary["X-RateLimit-Remaining"]}");
-                responseBuilder.AppendLine($"Requests count: {headerDictionary["X-RateLimit-Used"]}");
-                responseBuilder.AppendLine($"Rate limit resets at: {UnixTimeStampToDateTime(headerDictionary["X-RateLimit-Reset"])}");
-                //responseBuilder.AppendLine(headerDictionary["Link"]);
-                *//*
-                 * X-RateLimit-Remaining: 4997
-                    X-RateLimit-Reset: 1623657444
-                    X-RateLimit-Used: 3
-                 *//*
-                // Link: <https://api.github.com/user/9919/repos?page=2>; rel="next", <https://api.github.com/user/9919/repos?page=13>; rel="last"
-
-
-                return responseBuilder
-                    .AppendLine()
-                    .AppendLine()
-                    .AppendLine(response.Content)
-                    .ToString();
-            }
-            else
-            {
-                return response.ErrorMessage;
-            }
-            //return response.StatusCode.ToString();
-        }*/
+        //private const string USER_NAME = "carpenterx";
 
         public IRestResponse GetReposResponse(string token, string page = "1")
         {
@@ -74,7 +19,7 @@ namespace Projects_Manager.Models
             request.AddParameter("page", page);
 
             request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
-            client.Authenticator = new HttpBasicAuthenticator(USER_NAME, token);
+            client.Authenticator = new HttpBasicAuthenticator(Settings.Default.UserName, token);
             IRestResponse response = client.Execute(request);
             if (response.IsSuccessful)
             {
@@ -90,11 +35,11 @@ namespace Projects_Manager.Models
         {
             RestClient client = new RestClient("https://api.github.com/");
             ;
-            RestRequest request = new RestRequest(ListRepositoryProjects(USER_NAME, repoName), Method.GET);
+            RestRequest request = new RestRequest(ListRepositoryProjects(Settings.Default.UserName, repoName), Method.GET);
             request.AddParameter("state", "all");
 
             request.AddHeader("Accept", "application/vnd.github.inertia-preview+json");
-            client.Authenticator = new HttpBasicAuthenticator(USER_NAME, token);
+            client.Authenticator = new HttpBasicAuthenticator(Settings.Default.UserName, token);
             IRestResponse response = client.Execute(request);
             if (response.IsSuccessful)
             {
