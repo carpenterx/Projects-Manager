@@ -29,7 +29,7 @@ namespace Projects_Manager
         private readonly string repoInfosPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATION_FOLDER, REPO_INFOS_FILE);
 
         private const string TOKEN_PATH = @"C:\API\PROJECTS_MANAGER_GITHUB_TOKEN.TXT";
-        private const string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\API Responses\";
+        private const string RESPONSE_JSON_ROOT = @"C:\Users\jorda\Desktop\work\API Responses\";
         private const string REPOS_FILE_NAME = "repos.json";
         private const string PROJECTS_NAME_ENDING = "-Projects.json";
         private const string HEADERS_PART = "Headers-";
